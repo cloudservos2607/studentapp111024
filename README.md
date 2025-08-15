@@ -32,22 +32,22 @@ raw - select - json
     }
 
 -----------------
-tomcat8.5
+tomcat10
 
 sudo apt update
-sudo apt install openjdk-8-jdk -y
+sudo apt install openjdk-11-jdk -y
 java -version
 
 
-wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.100/bin/apache-tomcat-8.5.100.tar.gz
-sudo tar -zxvf apache-tomcat-8.5.100.tar.gz -C /opt/
-cd /opt/apache-tomcat-8.5.100
+ wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.44/bin/apache-tomcat-10.1.44.tar.gz
+sudo tar -zxvf apache-tomcat-10.1.44.tar.gz -C /opt/
+cd /opt/apache-tomcat-10.1.44
 
-sudo adduser --system --group tomcat8
+sudo adduser --system --group tomcat10
 
-sudo chown -R tomcat8:tomcat8 /opt/apache-tomcat-8.5.100
+sudo chown -R tomcat10:tomcat10 /opt/apache-tomcat-10.1.44
 
-cd /opt/apache-tomcat-8.5.100/bin
+cd /opt/apache-tomcat-10.1.44/bin
 ./startup.sh
 
 apt install net-tools -y
@@ -63,14 +63,14 @@ After=network.target
 
 [Service]
 Type=forking
-User=tomcat8
-Group=tomcat8
-Environment=CATALINA_PID=/opt/apache-tomcat-8.5.100/temp/tomcat.pid
-Environment=CATALINA_HOME=/opt/apache-tomcat-8.5.100
-Environment=CATALINA_BASE=/opt/apache-tomcat-8.5.100
+User=tomcat10
+Group=tomcat10
+Environment=CATALINA_PID=/opt/apache-tomcat-10.1.44/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/apache-tomcat-10.1.44
+Environment=CATALINA_BASE=/opt/apache-tomcat-10.1.44
 Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
-ExecStart=/opt/apache-tomcat-8.5.100/bin/startup.sh
-ExecStop=/opt/apache-tomcat-8.5.100/bin/shutdown.sh
+ExecStart=/opt/apache-tomcat-10.1.44/bin/startup.sh
+ExecStop=/opt/apache-tomcat-10.1.44/bin/shutdown.sh
 
 [Install]
 WantedBy=multi-user.target
@@ -84,13 +84,19 @@ sudo systemctl enable tomcat
 
 sudo systemctl status tomcat
 
-chown -R tomcat8:tomcat8 /opt/apache-tomcat-8.5.100/
+chown -R tomcat10:tomcat10 /opt/apache-tomcat-10.1.44/
 
 sudo systemctl restart tomcat
 
-cd /opt/apache-tomcat-8.5.100/webapps
+cd /opt/apache-tomcat-10.1.44/webapps
 
 cp /root/APP-STACK/student-proj-2/CustomWebApp/crud-app/target/CustomWebApp.war /opt/apache-tomcat-8.5.100/webapps/
+
+ls -ltr  src/main/resources/application.properties
+mvn clean compile package
+cp -R /root/crudapp/target/CustomWebApp.war /opt/apache-tomcat-10.1.44/webapps
+cp -R /root/crudapp/target/CustomWebApp.war /opt/apache-tomcat-10.1.44/webapps-javaee/
+
 
 sudo systemctl restart tomcat
 
@@ -101,16 +107,16 @@ vi /etc/mysql/mysql.conf.d/mysqld.cnf
 require_secure_transport = OFF
 
 Driver
-cd /opt/apache-tomcat-8.5.100/lib
+cd /opt/apache-tomcat-10.1.44/lib
 wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar
 
-chown -R tomcat8:tomcat8 mysql-connector-java-8.0.30.jar
+chown -R tomcat10:tomcat10 mysql-connector-java-8.0.30.jar
 
-cd /opt/apache-tomcat-8.5.100/webapps
+cd /opt/apache-tomcat-10.1.44/webapps
 
 copy the war/jar file
 
-cd /opt/apache-tomcat-8.5.100/conf
+cd /opt/apache-tomcat-10.1.44/conf
 
 vim context.xml
 
