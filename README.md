@@ -102,6 +102,50 @@ sudo systemctl restart tomcat
 
 --------------------------------------------
 
+
+sudo apt update
+
+sudo apt install mysql-server -y
+
+sudo systemctl start mysql
+sudo systemctl enable mysql
+sudo systemctl status mysql
+
+#sudo mysql_secure_installation
+
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+[mysqld]
+bind-address            = 0.0.0.0
+
+
+sudo systemctl restart mysql
+
+---------------------------------------------
+# mysql
+
+> create database studentapp;
+> use studentapp;
+> CREATE TABLE Students(student_id INT NOT NULL AUTO_INCREMENT,
+	student_name VARCHAR(100) NOT NULL,
+  student_addr VARCHAR(100) NOT NULL,
+	student_age VARCHAR(3) NOT NULL,
+	student_qual VARCHAR(20) NOT NULL,
+	student_percent VARCHAR(10) NOT NULL,
+	student_year_passed VARCHAR(10) NOT NULL,
+	PRIMARY KEY (student_id)
+);
+
+CREATE USER 'student'@'%' IDENTIFIED BY 'student@1';
+
+GRANT ALL PRIVILEGES ON studentapp.* TO 'student'@'%';
+
+flush privileges;
+
+
+======================
+
+
 vi /etc/mysql/mysql.conf.d/mysqld.cnf
 
 require_secure_transport = OFF
